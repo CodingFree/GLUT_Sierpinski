@@ -5,19 +5,13 @@
 #include <gl/gl.h>
 #include "Source.h"
 
-#define DEEP 2;
-
 void myinit()
 {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glPointSize(10.0);
 }
 
-void drawCanvas() {
-	float a[] = { -1, -1 };
-	float b[] = {  1, -1 };
-	float c[] = { 0, 1 };
-
+void drawTriangle(float *a, float *b, float *c, int degree) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBegin(GL_TRIANGLES);
 	glColor3f(0, 0, 0);glVertex3f(a[0], a[1], 0);
@@ -25,6 +19,14 @@ void drawCanvas() {
 	glColor3f(0, 0, 0);glVertex3f(c[0], c[1], 0);
 	glEnd();
 	glFlush();
+}
+
+void drawCanvas() {
+	float a[] = { -1, -1 };
+	float b[] = {  1, -1 };
+	float c[] = { 0, 1 };
+
+	drawTriangle(a, b, c, 2);
 }
 
 int main(int argc, char** argv) {
