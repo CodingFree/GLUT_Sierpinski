@@ -13,10 +13,11 @@ void myinit()
 	glPointSize(10.0);
 }
 
-void drawSierpinski() {
+void drawCanvas() {
 	float a[] = { -1, -1 };
 	float b[] = {  1, -1 };
 	float c[] = { 0, 1 };
+
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBegin(GL_TRIANGLES);
 	glColor3f(0, 0, 0);glVertex3f(a[0], a[1], 0);
@@ -33,7 +34,7 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Sierpinski Gasket");
 	myinit();
-	glutDisplayFunc(drawSierpinski);
+	glutDisplayFunc(drawCanvas);
 	glutMainLoop();
 
 }
