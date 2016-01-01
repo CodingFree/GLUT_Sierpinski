@@ -11,19 +11,20 @@ void myinit()
 	glPointSize(10.0);
 }
 
-void drawTriangle(float *a, float *b, float *c, int degree) {
+void setColor(float *color, float value) {
+	color[0] = value;
+	color[1] = value;
+	color[2] = value;
+}
+
+void drawTriangle(float *a, float *b, float *c, float *color) {
 	glBegin(GL_TRIANGLES);
-	GLfloat color[] = { 1, 1, 1 };
-	if (degree % 2) {
-			color[0] = 0;
-			color[1] = 0;
-			color[2] = 0;
-	}
 
 	glColor3f(color[0], color[1], color[2]);glVertex3f(a[0], a[1], 0);
 	glColor3f(color[0], color[1], color[2]);glVertex3f(b[0], b[1], 0);
 	glColor3f(color[0], color[1], color[2]);glVertex3f(c[0], c[1], 0);
 
+	glFlush();
 	glEnd();
 }
 
@@ -31,39 +32,52 @@ float getMiddle(float x, float y) {
 	return (x + y) / 2;
 }
 
-void updateArray(float *a, float *b, float *c, int degree) {
-	float a2[2]; 
-	float b2[2]; 
-	float c2[2];
-	drawTriangle(a, b, c, degree);
+void sierpinski(float *a, float *b, float *c, float degree) {
+	float ab[2]; 
+	float bc[2]; 
+	float ca[2];
+
+	glColor3f(1, 1, 1);
+	
 	if (degree > 0) {
 		degree = degree - 1;
+
 		//Primero obtengo la mitad
-		a2[0] = getMiddle(a[0], b[0]);
-		a2[1] = getMiddle(a[1], b[1]);
+		ab[0] = getMiddle(a[0], b[0]);
+		ab[1] = getMiddle(a[1], b[1]);
 
-		b2[0] = getMiddle(b[0], c[0]);
-		b2[1] = getMiddle(b[1], c[1]);
+		bc[0] = getMiddle(b[0], c[0]);
+		bc[1] = getMiddle(b[1], c[1]);
 
-		c2[0] = getMiddle(c[0], a[0]);
-		c2[1] = getMiddle(c[1], a[1]);
+		ca[0] = getMiddle(c[0], a[0]);
+		ca[1] = getMiddle(c[1], a[1]);
 
 		//Repinto
-		updateArray(a2, b2, c2, degree);
+		sierpinski(a, ab, ca, degree);
+		sierpinski(b, bc, ab, degree);
+		sierpinski(c, ca, bc, degree);
+
+		float color[3];
+		setColor(color, 1);
+		drawTriangle(ab, bc, ca, color);
 	}
 
 }
 
 void drawCanvas() {
-	int degree = 1;
+	int degree = 5;
 	float a[] = { -1, -1 };
 	float b[] = { 1, -1 };
 	float c[] = { 0, 1 };
+	float color[3];
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//drawTriangle(a, b, c, degree);
-	updateArray(a, b, c, degree);
+	//Primero dibujo la base negra.
+	setColor(color, 0);
+	drawTriangle(a, b, c, color);
+
+	sierpinski(a, b, c, degree);
 
 	glFlush();
 }
